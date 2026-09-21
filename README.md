@@ -70,7 +70,7 @@ Profile + Transcript
         ↓
 Eligibility & NOC Verification
         ↓
-Skill-Gap Analysis  ──────→  Curriculum Insight (Academician)
+Skill-Gap Analysis  ──────→  Curriculum Framing Agent  ──────→  Curriculum Insight (Academician)
         ↓
 LSRW Communication Assessment
         ↓
@@ -90,7 +90,7 @@ Reallocate if Required
         ↓
 Seat Filled → Placement Continuity Check
         ↓
-Feedback Loop → back into Skill-Gap & Curriculum Insight
+Feedback Loop → back into Skill-Gap & Curriculum Framing Agent
 ```
 
 In parallel, the same ranking-and-allocation logic runs for a second market: **academicians matched to FDPs, consultancy projects, research collaborations, guest lectures, mentorships, workshops, and innovation challenges** published by industry and institutions.
@@ -113,6 +113,7 @@ StuSkillLink goes further. The system can:
 * **Allocate** seats and opportunities, progressively, across multi-seat roles
 * **Observe** acceptance, decline, and screening outcomes
 * **Reallocate** vacant seats automatically
+* **Frame** batch-wide skill gaps into concrete syllabus recommendations
 * **Escalate** unresolved cases to human administrators
 * **Feed back** every outcome into curriculum insight and institution analytics
 
@@ -143,7 +144,7 @@ StuSkillLink goes further. The system can:
    │REALLOCATE │
    └─────┬─────┘
          │
-         └───────────→ Repeat, feeding outcomes back into Skill-Gap & Curriculum Insight
+         └───────────→ Repeat, feeding outcomes back into Skill-Gap & Curriculum Framing Agent
 ```
 
 This creates a **closed-loop, continuously self-correcting ecosystem** rather than a one-time recommendation or allocation event.
@@ -154,7 +155,7 @@ This creates a **closed-loop, continuously self-correcting ecosystem** rather th
 
 ## 1. Skill Assessment & Skill Mapping
 
-Every student completes a skill and aptitude assessment. The system compares three things: what a student has actually studied (transcript/curriculum), what they've self-reported (profile), and what industry roles in their target domain actually require. This produces a personal **Skill-Gap Report** with actionable learning-path suggestions — before a single application is wasted on a poor-fit role. The same comparison, aggregated across a batch or department, becomes the **Curriculum Insight Dashboard** for academicians and institutions.
+Every student completes a skill and aptitude assessment. The system compares three things: what a student has actually studied (transcript/curriculum), what they've self-reported (profile), and what industry roles in their target domain actually require. This produces a personal **Skill-Gap Report** with actionable learning-path suggestions — before a single application is wasted on a poor-fit role.
 
 ## 2. LSRW Communication Assessment
 
@@ -191,7 +192,7 @@ Candidates are organized into priority tiers based on fit and flexibility, not a
 * **Tier 2 — Best Fit + Limited Flexibility:** strong candidate, restricted to selected locations.
 * **Tier 3 — Remote / Virtual Only:** qualified, restricted to virtual roles.
 
-Within each tier, candidates are sub-ranked by skill-gap-adjusted match score, LSRW score (weighted by the role's stated Communication Weight), project relevance, experience, and reservation-category rules where applicable — with application timestamp as the final, deterministic tie-breaker. Every step is logged and explainable.
+Within each tier, candidates are sub-ranked by skill-gap-adjusted match score, LSRW score (weighted by the role's stated Communication Weight), project relevance, experience, and reservation-category rules where applicable — with application timestamp as the final, deterministic tie-breaker. Every step is logged and explainable. The same tiered-ranking engine is reused, unmodified in principle, to rank academicians against FDP, consultancy, and research opportunities.
 
 ## 5. Multi-Seat Progressive Allocation
 
@@ -234,21 +235,25 @@ On successful internship completion with positive performance feedback, the syst
 
 ## 8. Verified Digital Portfolio
 
-Every confirmed outcome — certifications, project records, internship completions, performance feedback, LSRW scores — is compiled automatically into a student's digital portfolio, pulled directly from platform records rather than self-declared. Verified by construction, not by claim.
+Every confirmed outcome — certifications, project records, internship completions, performance feedback, LSRW scores — is compiled automatically into a student's digital portfolio, pulled directly from platform records rather than self-declared, and issued as verified credentials linked to completed industry-led learning programs.
 
 ## 9. Academician Opportunity Matching
 
 The same tiered-ranking engine that allocates student seats is reused to match academicians against opportunities industry and institutions publish: faculty internships, industrial training, FDPs, consultancy projects, research collaborations, guest lectures, mentorship, workshops, and innovation challenges. One agent curates what's available; a second matches academicians to it — proving the ranking engine generalizes rather than being single-purpose.
 
-## 10. Institution Analytics
+## 10. Curriculum Framing
+
+A dedicated agent clusters batch-wide skill weaknesses (not individual gaps) and turns them into concrete, NOS-mapped syllabus recommendations for academicians and institutions — closing the loop from live industry demand back into what's actually taught.
+
+## 11. Institution Analytics
 
 Institutions get an aggregated dashboard — placement progress, academician opportunity engagement, NOC compliance, and skill-demand trends — scoped to the whole institution rather than one course or department.
 
-## 11. AI-Powered Communication
+## 12. AI-Powered Communication
 
 The LLM is used as a communication and explainability layer. It generates offer letters, interview process information, HR contact details, candidate allocation explanations, curriculum insight summaries, and human-readable ranking explanations. The LLM does not make allocation decisions — **deterministic eligibility and ranking logic handles every critical decision**; AI supports understanding, semantic matching, and communication.
 
-## 12. Explainable Allocation
+## 13. Explainable Allocation
 
 A candidate should not simply receive "You were ranked #17." StuSkillLink can provide:
 
@@ -264,7 +269,7 @@ Location Fit:       Tier 1
 Overall: Highly suitable candidate for the role.
 ```
 
-## 13. Human-in-the-Loop
+## 14. Human-in-the-Loop
 
 ```text
              AI Allocation
@@ -304,9 +309,17 @@ Administrators can intervene on unresolved responses, eligibility disputes, allo
                                   ↓
               ┌────────────────────────────────────────┐
               │ Skill & Communication Intelligence Agent│
-              │ (Skill-Gap Report + Curriculum Insight  │
-              │  + LSRW scoring)                        │
+              │ (Skill-Gap Report + LSRW scoring)       │
               └─────────────────┬────────────────────────┘
+                          skill-gap data
+                                  ↓
+              ┌────────────────────────────────────────┐
+              │      Curriculum Framing Agent           │
+              │ (clusters batch-wide skill weaknesses   │
+              │  → NOS-mapped syllabus recommendations) │
+              └─────────────────┬────────────────────────┘
+                                  ↓ recommendations
+                    Curriculum Output (Academician / Institution)
                                   ↓
               ┌────────────────────────────────────────┐
               │  Portfolio & Preference Agent            │
@@ -337,24 +350,25 @@ Administrators can intervene on unresolved responses, eligibility disputes, allo
                        └──────────┬───────────┘
                                   ↓
                     Feedback → Skill & Communication
-                       Intelligence Agent + Institution
-                              Analytics Dashboard
+                    Intelligence Agent + Curriculum Framing
+                    Agent + Institution Analytics Dashboard
 ```
 
 ---
 
 # 🧩 Agent Architecture
 
-StuSkillLink is built as **six specialized agents** — each owning a complete responsibility rather than a narrow sub-step, reducing integration overhead while preserving full functional coverage across all four stakeholders.
+StuSkillLink is built as **seven specialized agents** — each owning a complete responsibility rather than a narrow sub-step, reducing integration overhead while preserving full functional coverage across all four stakeholders.
 
-| Agent                                             | Responsibility                                                                                                                      |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Intake & Eligibility Agent**                     | Validates age/education/NOC eligibility for all stakeholders; parses resumes, transcripts, and CVs; normalizes and structures profile data |
-| **Skill & Communication Intelligence Agent**       | Produces the personal Skill-Gap Report; aggregates it into the Curriculum Insight Dashboard; administers and grades the LSRW test        |
-| **Portfolio & Preference Agent**                   | Builds each student's verified digital portfolio from confirmed platform records; captures ranked industry preferences and Open-to-Any-Partner declarations |
-| **Matching & Allocation Agent**                    | Builds the tiered, skill-gap- and LSRW-weighted rank list (with reservation-category handling and timestamp tie-break); runs two-stage, multi-seat allocation; checks internship-to-placement continuity |
-| **Academician Engagement Agent**                   | Curates opportunities industry/institutions publish for academicians (FDPs, consultancy, research, guest lectures, mentorship, workshops, innovation challenges) and matches academicians to them using the same ranking logic |
-| **Monitoring, Notification & Escalation Agent**    | Tracks outcomes across every flow; triggers re-offers on decline/failure; generates offer letters and notifications; escalates unresolved cases; feeds outcomes back into the Skill & Communication Intelligence Agent |
+| # | Agent                                             | Responsibility                                                                                                                      |
+| - | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | **Intake & Eligibility Agent**                     | Validates age/education/NOC eligibility for all stakeholders; parses resumes, transcripts, and CVs; normalizes and structures profile data |
+| 2 | **Skill & Communication Intelligence Agent**       | Produces the personal Skill-Gap Report; administers and grades the LSRW test                        |
+| 3 | **Portfolio & Preference Agent**                   | Builds each student's verified digital portfolio from confirmed platform records; captures ranked industry preferences and Open-to-Any-Partner declarations |
+| 4 | **Matching & Allocation Agent**                    | Builds the tiered, skill-gap- and LSRW-weighted rank list (with reservation-category handling and timestamp tie-break); runs two-stage, multi-seat allocation; checks internship-to-placement continuity |
+| 5 | **Academician Engagement Agent**                   | Curates opportunities industry/institutions publish for academicians (FDPs, consultancy, research, guest lectures, mentorship, workshops, innovation challenges) and matches academicians to them using the same ranking logic |
+| 6 | **Monitoring, Notification & Escalation Agent**    | Tracks outcomes across every flow; triggers re-offers on decline/failure; generates offer letters and notifications; escalates unresolved cases; feeds outcomes back into the Skill & Communication Intelligence Agent and Curriculum Framing Agent |
+| 7 | **Curriculum Framing Agent**                       | Clusters batch-wide skill weaknesses (not individual gaps) from skill-gap data and industry input; produces NOS-mapped syllabus recommendations and adopted curriculum outputs for academicians and institutions |
 
 The agents work together as a closed-loop system spanning students, academicians, industry, and institutions.
 
@@ -390,7 +404,7 @@ For large-scale optimization, the system can use:
 
 * Weighted tiered scoring
 * Constraint-based matching
-* OR-Tools
+* OR-Tools (CP-SAT)
 * Hungarian algorithm
 
 ---
@@ -447,7 +461,7 @@ Portfolio
 ├── Verified Skills & Certifications (with source)
 ├── Project Records
 ├── Internship Completions & Performance Feedback
-└── Achievement Badges
+└── Achievement Badges (W3C Verifiable Credentials / Open Badges 3.0)
 ```
 
 ## Opportunity Record
@@ -458,6 +472,16 @@ Opportunity
 ├── Eligibility Criteria
 ├── Matched Academician
 └── Status
+```
+
+## Curriculum Record
+```text
+Curriculum Recommendation
+├── Batch / Department
+├── Clustered Skill Weaknesses
+├── NOS-Mapped Syllabus Recommendation
+├── Academician + Industry Sign-off Status
+└── Adoption Status
 ```
 
 ## Match Record
@@ -553,7 +577,7 @@ Three months later, the Allocation Agent's placement-continuity check flags her 
 
 ### Meanwhile — Dr. Meera (Academician)
 
-Her Curriculum Insight Dashboard shows the same cloud-fundamentals gap aggregated across her batch. Separately, the Academician Engagement Agent matches her to a data-engineering consultancy project Bright Analytics has published — allotted through the same ranking logic used for Priya.
+The Curriculum Framing Agent clusters the same cloud-fundamentals gap across Dr. Meera's batch and recommends a syllabus update, pending her and industry's joint sign-off. Separately, the Academician Engagement Agent matches her to a data-engineering consultancy project Bright Analytics has published — allotted through the same ranking logic used for Priya.
 
 Both outcomes appear on their institution's Analytics Dashboard by year end.
 
@@ -574,6 +598,7 @@ Both outcomes appear on their institution's Analytics Dashboard by year end.
 | Placement continuity                 |                      ❌ |                        ❌ |            ✅ |
 | Verified digital portfolio           |                      ❌ |                        ❌ |            ✅ |
 | Academician opportunity matching     |                      ❌ |                        ❌ |            ✅ |
+| Curriculum co-design (Acad + Industry) |                    ❌ |                        ❌ |            ✅ |
 | Institution-level analytics          |                      ❌ |                        ❌ |            ✅ |
 | Explainable decisions                |                     🟡 |                       🟡 |            ✅ |
 | Human escalation                     |                     🟡 |                       🟡 |            ✅ |
@@ -595,26 +620,22 @@ Better skill-matched placement, plus new skilled roles the platform itself creat
 ### 🥈 SDG 4 — Quality Education
 Closes the loop between classroom curriculum and actual industry demand, for the first time at scale.
 
-### 🥉 SDG 10 — Reduced Inequalities
-Explainable, rule-based allocation makes access to opportunity less dependent on informal networks or institutional reputation.
-
 ---
 
 # 💻 Technology Stack
 
 | Layer                     | Technology                                                                 |
 | -------------------------- | --------------------------------------------------------------------------- |
-| Frontend                   | React 19, Tailwind CSS                                                     |
-| Backend                    | Python, FastAPI, REST APIs                                                 |
-| AI & ML                    | Open-source LLM, NLP, embeddings, semantic matching, explainable AI        |
-| Agentic AI                 | 6 specialized agents, LangGraph orchestration                              |
-| Speech & Language          | ASR (Speaking), LLM rubric scoring (Writing), auto-graded quizzes (Listening/Reading) |
-| Database & Storage         | Neon PostgreSQL (structured records), MongoDB (unstructured resume/portfolio data) |
-| Optimization                | OR-Tools / Hungarian algorithm                                             |
-| Cloud & Deployment          | AWS, Docker                                                                |
-| Integration                | Email/SMS via Twilio APIs, offer letter automation                        |
-| Security                   | JWT authentication, role-based access, secure file handling               |
-| Learning Integrations       | NPTEL / Coursera / certification-provider APIs, verifiable badge issuance |
+| Frontend                   | React 19, Tailwind CSS, Vite, React Query                                  |
+| Backend                    | Python, FastAPI, Pydantic, Celery + Redis                                  |
+| **AI/ML & Agentic AI**      | gpt-oss-120B (Groq/vLLM), BGE/Sentence-BERT, spaCy, LangChain, LangGraph, MCP, 7 Specialized Agents |
+| Speech & Language          | Whisper Large-v3, Kokoro-82M, Embedding-based Grading                     |
+| Database & Optimisation    | Neon PostgreSQL, Supabase, Google OR-Tools (CP-SAT)                       |
+| Deployment                 | Vercel & Render                                                            |
+| Scalability                | AWS (EC2, S3, RDS), Kubernetes                                            |
+| Security                   | OAuth 2.0, JWT, bcrypt, Cloudflare                                        |
+| MCP Server Connections     | Twilio, NPTEL, Coursera, Udemy and other online platforms, Bhashini API, GitHub MCP |
+| Credentialing               | W3C Verifiable Credentials, Open Badges 3.0                               |
 
 ---
 
@@ -630,7 +651,8 @@ StuSkillLink/
 │   │   ├── portfolio_preference_agent.py
 │   │   ├── matching_allocation_agent.py
 │   │   ├── academician_engagement_agent.py
-│   │   └── monitoring_escalation_agent.py
+│   │   ├── monitoring_escalation_agent.py
+│   │   └── curriculum_framing_agent.py
 │   │
 │   ├── services/
 │   │   ├── matching.py
@@ -638,6 +660,7 @@ StuSkillLink/
 │   │   ├── eligibility.py
 │   │   ├── lsrw_scoring.py
 │   │   ├── portfolio_builder.py
+│   │   ├── curriculum_clustering.py
 │   │   └── notifications.py
 │   │
 │   ├── models/
@@ -680,28 +703,31 @@ Students create profiles with transcripts and preferences; academicians register
 The Intake & Eligibility Agent validates scheme-level eligibility and NOC status against the Institution Module.
 
 ### Step 3 — Skill-Gap & Communication Assessment
-The Skill & Communication Intelligence Agent produces the Skill-Gap Report, Curriculum Insight Dashboard, and LSRW score.
+The Skill & Communication Intelligence Agent produces the Skill-Gap Report and LSRW score.
 
-### Step 4 — Portfolio & Preference Capture
+### Step 4 — Curriculum Framing
+The Curriculum Framing Agent clusters batch-wide skill weaknesses from that skill-gap data (plus industry input) into NOS-mapped syllabus recommendations, routed through a joint academician + industry sign-off before adoption.
+
+### Step 5 — Portfolio & Preference Capture
 The Portfolio & Preference Agent builds the verified digital portfolio and captures ranked industry preferences.
 
-### Step 5 — Ranking
+### Step 6 — Ranking
 The Matching & Allocation Agent creates a tiered candidate list for every role, including reservation-category handling.
 
-### Step 6 — Allocation
+### Step 7 — Allocation
 Seats are offered to the highest-priority eligible candidates, preferred partners first, general pool only on opt-in.
 
-### Step 7 — Academician Opportunity Matching (Parallel Track)
+### Step 8 — Academician Opportunity Matching (Parallel Track)
 The Academician Engagement Agent curates and matches academicians to FDPs, consultancy, research, and collaboration opportunities using the same ranking logic.
 
-### Step 8 — Observe
+### Step 9 — Observe
 The system observes: Accepted, Declined, Pending, Screening Passed, Screening Failed.
 
-### Step 9 — Reallocation
+### Step 10 — Reallocation
 Vacant seats or opportunities move automatically to the next eligible candidate.
 
-### Step 10 — Completion & Continuity
-Filled seats trigger placement-continuity checks; all outcomes feed back into the Skill & Communication Intelligence Agent and Institution Analytics Dashboard.
+### Step 11 — Completion & Continuity
+Filled seats trigger placement-continuity checks; all outcomes feed back into the Skill & Communication Intelligence Agent, the Curriculum Framing Agent, and the Institution Analytics Dashboard.
 
 ---
 
@@ -747,44 +773,47 @@ Real-world deployment would require:
 Student, academician, industry, and institution profiles with NOC verification.
 
 ### Phase 2 — Skill Intelligence
-Skill-gap analysis, curriculum insight, and LSRW communication assessment.
+Skill-gap analysis and LSRW communication assessment.
 
-### Phase 3 — Portfolio & Preference Layer
+### Phase 3 — Curriculum Framing
+Batch-wide skill-gap clustering into NOS-mapped syllabus recommendations, with academician + industry sign-off workflow.
+
+### Phase 4 — Portfolio & Preference Layer
 Verified digital portfolio and preference-aware matching.
 
-### Phase 4 — Tiered Ranking & Optimization
+### Phase 5 — Tiered Ranking & Optimization
 Reservation-category-aware, multi-factor ranking engine.
 
-### Phase 5 — Agentic Allocation
+### Phase 6 — Agentic Allocation
 Multi-seat allocation, automatic reallocation, and placement continuity.
 
-### Phase 6 — Academician & Institution Layer
+### Phase 7 — Academician & Institution Layer
 Academician opportunity matching and institution-wide analytics.
 
-### Phase 7 — Scalable, Multi-Institution Integration
+### Phase 8 — Scalable, Multi-Institution Integration
 Extension beyond a single institution to scholarships, skilling programs, and government opportunities more broadly.
 
 ---
 
 # 🏆 What Makes StuSkillLink Different?
 
-### 01 — Skill-Gap-First, Not Application-First
-Students see what they're missing before they apply, not after rejection.
+### 01 — Automated Internship Platform
+End-to-end posting, matching, and allotment — no manual shortlisting.
 
-### 02 — One Engine, Two Markets
-The same tiered-ranking, multi-seat allocation logic serves both student placement and academician opportunity matching.
+### 02 — Curriculum Agent
+Converts skill gaps into academia–industry syllabus updates, not just a dashboard metric.
 
-### 03 — Communication as a Ranked Signal
-LSRW is a role-weighted ranking input, not a disconnected pass/fail test.
+### 03 — Auditable Ranking
+Transparent student and academician ranking, with reservation handling and deterministic tie-breaking, extended to FDP/research/consultancy opportunities.
 
-### 04 — A Verified Digital Portfolio
-Built automatically from platform records, not self-declared.
+### 04 — Skill-First Allocation
+Assesses skills, aptitude, and LSRW before allocation — not resume keywords after the fact.
 
-### 05 — A Genuine Fourth Stakeholder
-Institutions get aggregate analytics no individual academician dashboard provides.
+### 05 — Preference Allocation
+Prioritizes preferred companies first, general pool only on student opt-in.
 
-### 06 — Continuous, Not One-Time
-Skill-gap insights shape curriculum; successful internships feed the next placement cycle; every outcome loops back in.
+### 06 — Verified Credentials
+Credentials earned through industry-led learning are issued and verified, not self-declared.
 
 ---
 
