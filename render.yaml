@@ -1,0 +1,68 @@
+services:
+  - type: web
+    name: stuskilllink-api-sih26044
+    runtime: python
+    plan: free
+    region: singapore
+    branch: main
+    rootDir: backend
+    autoDeployTrigger: commit
+    buildCommand: pip install -r requirements.txt -r requirements-integrations.txt
+    startCommand: alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /ready
+    buildFilter:
+      paths:
+        - backend/**
+        - render.yaml
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: AUTO_CREATE_SCHEMA
+        value: "false"
+      - key: AUTO_SEED_DEMO
+        value: "false"
+      - key: SECURE_COOKIES
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: lax
+      - key: REQUIRE_EMAIL_VERIFICATION
+        value: "false"
+      - key: PUBLIC_APP_URL
+        value: https://frontend-sandy-iota-25.vercel.app
+      - key: CORS_ORIGINS
+        value: https://frontend-sandy-iota-25.vercel.app,https://frontend-b5oqxee8m-md-sohail-ais-projects.vercel.app
+      - key: ALLOWED_HOSTS
+        value: stuskilllink-api-sih26044.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: stuskilllink-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: stuskilllink-redis
+          type: keyvalue
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: LANGGRAPH_CHECKPOINT_PATH
+        value: /tmp/langgraph-checkpoints.sqlite
+      - key: LLM_PROVIDER_PRIORITY
+        value: nvidia,groq,gemini,openrouter
+      - key: NVIDIA_NIM_BASE_URL
+        value: https://integrate.api.nvidia.com/v1
+      - key: NVIDIA_NIM_MODEL
+        value: meta/llama-3.1-8b-instruct
+      - key: GROQ_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-20b
+      - key: GEMINI_BASE_URL
+        value: https://generativelanguage.googleapis.com/v1beta
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash-lite
+      - key: OPENROUTER_BASE_URL
+        value: https://openrouter.ai/api/v1
+      - key: OPENROUTER_MODEL
+        value: openrouter/free
