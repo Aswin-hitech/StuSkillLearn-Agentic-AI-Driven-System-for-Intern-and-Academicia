@@ -1,0 +1,108 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: stuskilllink
+      POSTGRES_USER: stuskilllink
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stuskilllink-local-only}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stuskilllink -d stuskilllink"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  migrate:
+    build: ./backend
+    command: ["alembic", "upgrade", "head"]
+    environment: &backend_env
+      ENVIRONMENT: development
+      DEBUG: "false"
+      DATABASE_URL: postgresql+psycopg://stuskilllink:${POSTGRES_PASSWORD:-stuskilllink-local-only}@postgres:5432/stuskilllink
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-local-compose-secret-change-before-any-public-deployment-123456}
+      CORS_ORIGINS: http://localhost:8080
+      ALLOWED_HOSTS: localhost,127.0.0.1,backend,frontend
+      AUTO_CREATE_SCHEMA: "false"
+      AUTO_SEED_DEMO: ${AUTO_SEED_DEMO:-true}
+      SECURE_COOKIES: "false"
+      COOKIE_SAMESITE: lax
+      REQUIRE_EMAIL_VERIFICATION: "false"
+      PUBLIC_APP_URL: http://localhost:8080
+      SMTP_URL: ${SMTP_URL:-}
+      SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL:-noreply@stuskilllink.local}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_FROM_NUMBER: ${TWILIO_FROM_NUMBER:-}
+      MONGODB_URI: ${MONGODB_URI:-}
+      NVIDIA_NIM_API_KEY: ${NVIDIA_NIM_API_KEY:-}
+      NVIDIA_NIM_BASE_URL: ${NVIDIA_NIM_BASE_URL:-https://integrate.api.nvidia.com/v1}
+      NVIDIA_NIM_MODEL: ${NVIDIA_NIM_MODEL:-meta/llama-3.1-8b-instruct}
+      LLM_PROVIDER_PRIORITY: ${LLM_PROVIDER_PRIORITY:-nvidia,groq,gemini,openrouter}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  backend:
+    build: ./backend
+    environment: *backend_env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    expose:
+      - "8000"
+
+  worker:
+    build: ./backend
+    command: ["celery", "-A", "app.celery_app.celery_app", "worker", "--loglevel=INFO", "--concurrency=2"]
+    environment: *backend_env
+    depends_on:
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  beat:
+    build: ./backend
+    command: ["celery", "-A", "app.celery_app.celery_app", "beat", "--loglevel=INFO"]
+    environment: *backend_env
+    depends_on:
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: /api/v1
+        VITE_SHOW_DEMO_ACCOUNTS: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:

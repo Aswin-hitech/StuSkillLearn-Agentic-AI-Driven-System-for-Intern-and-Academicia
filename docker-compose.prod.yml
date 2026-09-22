@@ -1,0 +1,101 @@
+name: stuskilllink-production
+
+x-backend-env: &backend_env
+  ENVIRONMENT: production
+  DEBUG: "false"
+  AUTO_CREATE_SCHEMA: "false"
+  AUTO_SEED_DEMO: "false"
+  SECURE_COOKIES: "true"
+  REQUIRE_EMAIL_VERIFICATION: "true"
+  COOKIE_SAMESITE: lax
+  CORS_ORIGINS: ${PUBLIC_APP_URL:?Set PUBLIC_APP_URL, for example https://stuskill.example.com}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS:?Set ALLOWED_HOSTS to the public host name}
+  PUBLIC_APP_URL: ${PUBLIC_APP_URL:?Set PUBLIC_APP_URL}
+  DATABASE_URL: ${DATABASE_URL:?Set a PostgreSQL DATABASE_URL}
+  REDIS_URL: ${REDIS_URL:?Set a production Redis URL}
+  JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Set a unique 32+ character JWT secret}
+  SMTP_URL: ${SMTP_URL:?Set SMTP_URL because production email verification is enabled}
+  SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL:-noreply@stuskilllink.example}
+  LANGGRAPH_CHECKPOINT_PATH: /tmp/langgraph-checkpoints.sqlite
+  LLM_PROVIDER_PRIORITY: ${LLM_PROVIDER_PRIORITY:-nvidia,groq,gemini,openrouter}
+  NVIDIA_NIM_API_KEY: ${NVIDIA_NIM_API_KEY:-}
+  NVIDIA_NIM_BASE_URL: ${NVIDIA_NIM_BASE_URL:-https://integrate.api.nvidia.com/v1}
+  NVIDIA_NIM_MODEL: ${NVIDIA_NIM_MODEL:-meta/llama-3.1-8b-instruct}
+  GROQ_API_KEY: ${GROQ_API_KEY:-}
+  GROQ_BASE_URL: ${GROQ_BASE_URL:-https://api.groq.com/openai/v1}
+  GROQ_MODEL: ${GROQ_MODEL:-openai/gpt-oss-20b}
+  GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+  GEMINI_BASE_URL: ${GEMINI_BASE_URL:-https://generativelanguage.googleapis.com/v1beta}
+  GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash-lite}
+  OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+  OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+  OPENROUTER_MODEL: ${OPENROUTER_MODEL:-openrouter/free}
+  TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+  TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+  TWILIO_FROM_NUMBER: ${TWILIO_FROM_NUMBER:-}
+  MONGODB_URI: ${MONGODB_URI:-}
+
+x-backend-security: &backend_security
+  read_only: true
+  tmpfs:
+    - /tmp:size=128m,mode=1777
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+
+services:
+  migrate:
+    build: ./backend
+    command: ["alembic", "upgrade", "head"]
+    environment: *backend_env
+    restart: "no"
+    <<: *backend_security
+
+  backend:
+    build: ./backend
+    environment: *backend_env
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    expose:
+      - "8000"
+    <<: *backend_security
+
+  worker:
+    build: ./backend
+    command: ["celery", "-A", "app.celery_app.celery_app", "worker", "--loglevel=INFO", "--concurrency=2"]
+    environment: *backend_env
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    <<: *backend_security
+
+  beat:
+    build: ./backend
+    command: ["celery", "-A", "app.celery_app.celery_app", "beat", "--loglevel=INFO", "--schedule=/tmp/celerybeat-schedule"]
+    environment: *backend_env
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    <<: *backend_security
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: /api/v1
+        VITE_SHOW_DEMO_ACCOUNTS: "false"
+    restart: unless-stopped
+    ports:
+      - "${PUBLIC_PORT:-8080}:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
