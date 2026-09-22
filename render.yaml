@@ -1,4 +1,11 @@
 services:
+  - type: keyvalue
+    name: stuskilllink-redis
+    plan: free
+    region: singapore
+    maxmemoryPolicy: noeviction
+    ipAllowList: []
+
   - type: web
     name: stuskilllink-api-sih26044
     runtime: python
@@ -66,3 +73,12 @@ services:
         value: https://openrouter.ai/api/v1
       - key: OPENROUTER_MODEL
         value: openrouter/free
+
+databases:
+  - name: stuskilllink-postgres
+    plan: free
+    region: singapore
+    databaseName: stuskilllink
+    user: stuskilllink
+    postgresMajorVersion: "16"
+    ipAllowList: []
