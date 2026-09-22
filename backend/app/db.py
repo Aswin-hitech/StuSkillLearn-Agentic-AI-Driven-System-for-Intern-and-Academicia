@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-from app.config import settings
+from app.config import settings, sqlalchemy_database_url
 
 
 class Base(DeclarativeBase):
@@ -19,7 +19,7 @@ engine_kwargs = {
 }
 if not settings.database_url.startswith("sqlite"):
     engine_kwargs.update({"pool_size": 10, "max_overflow": 20, "pool_recycle": 1800})
-engine = create_engine(settings.database_url, **engine_kwargs)
+engine = create_engine(sqlalchemy_database_url(settings.database_url), **engine_kwargs)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, expire_on_commit=False, future=True)
 
 

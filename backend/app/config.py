@@ -12,6 +12,13 @@ _DEFAULT_JWT_SECRETS = {
 }
 
 
+def sqlalchemy_database_url(value: str) -> str:
+    """Select SQLAlchemy's installed psycopg v3 driver for plain Render URLs."""
+    if value.startswith("postgresql://"):
+        return value.replace("postgresql://", "postgresql+psycopg://", 1)
+    return value
+
+
 class Settings(BaseSettings):
     app_name: str = "StuSkillLink"
     environment: str = "development"
