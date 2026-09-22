@@ -32,7 +32,7 @@ services:
       - key: PUBLIC_APP_URL
         value: https://frontend-sandy-iota-25.vercel.app
       - key: CORS_ORIGINS
-        value: https://frontend-sandy-iota-25.vercel.app,https://frontend-b5oqxee8m-md-sohail-ais-projects.vercel.app
+        value: https://frontend-sandy-iota-25.vercel.app,https://frontend-md-sohail-ais-projects.vercel.app,https://frontend-b5oqxee8m-md-sohail-ais-projects.vercel.app
       - key: ALLOWED_HOSTS
         value: stuskilllink-api-sih26044.onrender.com
       - key: DATABASE_URL
