@@ -1,0 +1,15 @@
+.env
+.venv/
+venv/
+node_modules/
+dist/
+.vercel/
+*.log
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.db
+*.sqlite*
+.DS_Store
+tmp/
